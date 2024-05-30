@@ -107,9 +107,3 @@ def create_book(request):
     book.save()
     book_serialized = BookSerializer(book)
     return Response(book_serialized.data)
-
-
-# @api_view(['PUT'])
-# @permission_classes([])
-# def add_book(request):
-#     bookshelf = Bookshelf.objects.get(profile = request.data['profile'])
