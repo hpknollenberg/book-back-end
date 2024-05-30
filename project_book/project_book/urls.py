@@ -32,4 +32,7 @@ urlpatterns = [
     path('bookshelf/', get_bookshelf),
     path('books/', get_books),
     path('create-book/', create_book),
+    path('library/', get_all_books),
+    path('add-book/', add_book),
+    path('remove-book/', remove_book)
 ]
