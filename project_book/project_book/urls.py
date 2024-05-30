@@ -29,4 +29,7 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view()),
     path('refresh/', TokenRefreshView.as_view()),
     path('create-user/', create_user),
+    path('bookshelf/', get_bookshelf),
+    path('books/', get_books),
+    path('create-book/', create_book),
 ]

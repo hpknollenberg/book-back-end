@@ -4,4 +4,5 @@ from app_book.models import *
 class ProfileAdmin(admin.ModelAdmin):
     pass
 
-admin.site.register(Profile, ProfileAdmin)
+My_Models = [Profile, Bookshelf, Book]
+admin.site.register(My_Models, ProfileAdmin)

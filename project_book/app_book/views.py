@@ -14,6 +14,28 @@ def get_profile(request):
     serializer = ProfileSerializer(profile, many=False)
     return Response(serializer.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_bookshelf(request):
+    print("BOOKSHELF REQUEST: ", request)
+    user = request.user
+    profile = user.profile
+    bookshelf = profile.bookshelf
+    bookshelfserializer = BookshelfSerializer(bookshelf, many=False)
+    return Response(bookshelfserializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_books(request):
+    print("BOOKSHELF REQUEST: ", request)
+    user = request.user
+    profile = user.profile
+    bookshelf = profile.bookshelf
+    books = bookshelf.books
+    booksserializer = BookSerializer(books, many=True)
+    return Response(booksserializer.data)
+
+
 @api_view(['POST'])
 @permission_classes([])
 def create_user(request):
@@ -30,3 +52,16 @@ def create_user(request):
   profile.save()
   profile_serialized = ProfileSerializer(profile)
   return Response(profile_serialized.data)
+
+
+@api_view(['POST'])
+@permission_classes([])
+def create_book(request):
+    book = Book.objects.create(
+        author = request.data['author'],
+        genre = request.data['genre'],
+        title = request.data['title'],
+    )
+    book.save()
+    book_serialized = BookSerializer(book)
+    return Response(book_serialized.data)

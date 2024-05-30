@@ -8,3 +8,16 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
+    
+
+class Book(models.Model):
+    author = models.TextField()
+    genre = models.TextField()
+    title = models.TextField()
+   
+class Bookshelf(models.Model):
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE, related_name='bookshelf')
+    books = models.ManyToManyField(Book)
+
+
+    
