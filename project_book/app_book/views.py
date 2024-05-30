@@ -35,6 +35,44 @@ def get_books(request):
     booksserializer = BookSerializer(books, many=True)
     return Response(booksserializer.data)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_all_books(request):
+    print("BOOK DATABASE REQUEST: ", request)
+    books = Book.objects.all()
+    allbooksserializer = BookSerializer(books, many=True)
+    return Response(allbooksserializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def add_book(request):
+    print("ADD BOOK", request)
+    user = request.user
+    profile = user.profile
+    bookshelf = profile.bookshelf
+    books = bookshelf.books
+    book = Book.objects.get(author = request.data['author'], title = request.data['title'])
+    books.add(book)
+    booksserializer = BookSerializer(books, many=True)
+    return Response(booksserializer.data)
+
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def remove_book(request):
+    print("ADD BOOK", request)
+    user = request.user
+    profile = user.profile
+    bookshelf = profile.bookshelf
+    books = bookshelf.books
+    book = Book.objects.get(author = request.data['author'], title = request.data['title'])
+    books.remove(book)
+    booksserializer = BookSerializer(books, many=True)
+    return Response(booksserializer.data)
+
+
 
 @api_view(['POST'])
 @permission_classes([])
@@ -50,12 +88,16 @@ def create_user(request):
     last_name = request.data['last_name']
   )
   profile.save()
+  bookshelf = Bookshelf.objects.create(
+      profile = profile,
+  )
+  bookshelf.save()
   profile_serialized = ProfileSerializer(profile)
   return Response(profile_serialized.data)
 
 
 @api_view(['POST'])
-@permission_classes([])
+@permission_classes([IsAuthenticated])
 def create_book(request):
     book = Book.objects.create(
         author = request.data['author'],
@@ -65,3 +107,9 @@ def create_book(request):
     book.save()
     book_serialized = BookSerializer(book)
     return Response(book_serialized.data)
+
+
+# @api_view(['PUT'])
+# @permission_classes([])
+# def add_book(request):
+#     bookshelf = Bookshelf.objects.get(profile = request.data['profile'])
